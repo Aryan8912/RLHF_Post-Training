@@ -2,6 +2,7 @@
 # RLHF Post-Training Pipeline — Complete Colab Notebooks
 
 A complete, runnable implementation of the RLHF alignment pipeline using GPT-2 (117M params) and HuggingFace libraries. Every notebook runs on a **free Colab T4 GPU** in under 10 minutes.
+<img width="1389" height="490" alt="image" src="https://github.com/user-attachments/assets/d3ab122d-6b7f-4a7d-8e4c-5817f7e8950e" />
 
 ---
 
