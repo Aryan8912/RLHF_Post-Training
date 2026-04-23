@@ -6,13 +6,13 @@
 
 # Question B — Evaluating LMM Output Quality
 
-We deployed an internal report summarization model and need a rigorous evaluation framework beyond subjective feedback.
+deployed an internal report summarization model and need an evaluation framework beyond subjective feedback.
 
 ---
 
 ## 1. Build a Ground Truth Dataset
 
-I would create a manually reviewed dataset of **500–1,000 internal reports** sampled across:
+create a manually reviewed dataset of **500–1,000 internal reports** sampled across:
 
 - short reports
 - long reports
