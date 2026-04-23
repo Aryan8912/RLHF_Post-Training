@@ -153,6 +153,7 @@ Example:
   ]
 }
 
+```
 # Question C — On-Premise LLM Deployment
 
 The client requires fully offline inference with no external API calls. Infrastructure is limited to a single server with **2× NVIDIA A100 80GB GPUs**, and responses must complete within **3 seconds** for a **500-token input**.
