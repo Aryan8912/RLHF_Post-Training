@@ -1,7 +1,5 @@
 # Artikate_ML_Engineer-Task
 
-# Written Systems Design Review
-
 ---
 # Question A — Prompt Injection & LMM Security
 
