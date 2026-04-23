@@ -152,3 +152,147 @@ Example:
     "supply chain delay"
   ]
 }
+
+# Question C — On-Premise LLM Deployment
+
+The client requires fully offline inference with no external API calls. Infrastructure is limited to a single server with **2× NVIDIA A100 80GB GPUs**, and responses must complete within **3 seconds** for a **500-token input**.
+
+---
+
+## Step 1: Candidate Model Selection
+
+I would benchmark the following open-source models:
+
+- Llama 3 8B  
+- Llama 3 70B  
+- Mistral 7B  
+- Mixtral 8x7B  
+
+For a strict latency SLA, I would prioritize 7B–13B models because they typically provide the best latency/quality tradeoff.
+
+---
+
+## Step 2: VRAM Estimation
+
+Formula:
+
+weight memory = parameters × bytes per parameter
+
+### 8B model (FP16)
+
+8B × 2 bytes ≈ **16GB**
+
+Add:
+
+- KV cache  
+- activations  
+- runtime overhead  
+
+Total ≈ **25GB**
+
+This fits comfortably on one A100.
+
+---
+
+### 70B model (FP16)
+
+70B × 2 bytes ≈ **140GB**
+
+With inference overhead:
+
+≈ **150–160GB**
+
+This requires tensor parallelism across both GPUs and leaves little room for spikes.
+
+---
+
+## Step 3: Quantization
+
+I would evaluate:
+
+:contentReference[oaicite:4]{index=4}  
+:contentReference[oaicite:5]{index=5}  
+
+Using INT4 quantization:
+
+70B model memory drops to roughly **35–40GB**
+
+Tradeoff:
+
+slight accuracy degradation.
+
+---
+
+## Step 4: Serving Layer
+
+Primary choice:
+
+:contentReference[oaicite:6]{index=6}
+
+Why:
+
+- paged attention  
+- efficient KV cache handling  
+- continuous batching  
+- OpenAI-compatible API interface  
+
+Alternative:
+
+:contentReference[oaicite:7]{index=7}  
+
+Lower latency but higher operational complexity.
+
+---
+
+## Step 5: Expected Throughput
+
+Llama 3 8B typically delivers:
+
+~120–200 tokens/sec/GPU
+
+For:
+
+500 input tokens  
+200 output tokens  
+
+Estimated response time:
+
+~2–3 seconds
+
+This meets the SLA.
+
+---
+
+Llama 3 70B typically delivers:
+
+~20–40 tokens/sec
+
+Likely violates latency requirements.
+
+---
+
+## Monitoring
+
+Track:
+
+- p95 latency  
+- GPU utilization  
+- OOM failures  
+- token throughput  
+
+Tools:
+
+:contentReference[oaicite:10]{index=10}  
+:contentReference[oaicite:11]{index=11}  
+
+---
+
+## Final Recommendation
+
+Deploy:
+
+Llama 3 8B  
++ INT4 quantization  
++ :contentReference[oaicite:13]{index=13}  
+
+This provides the best balance of latency, reliability, and operational simplicity for fully offline deployment.
